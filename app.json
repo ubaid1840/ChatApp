@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "mychatapp",
+    "slug": "mychatapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "plugins": [
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "Allow $(PRODUCT_NAME) to access your contacts."
+        },
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      "expo-localization"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ubaidrehman1840.mychatapp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      },
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.ubaidrehman1840.mychatapp"
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d94f001d-7824-41a9-a941-0bf414df49d3"
+      }
+    }
+  },
+  "android.config.googleMaps.apiKey" : "AIzaSyDkGgYoKdGOiq75-yOEDrkcwTreQRIE44Y",
+  "ios.config.googleMapsApiKey" : "AIzaSyDkGgYoKdGOiq75-yOEDrkcwTreQRIE44Y"
+}
+
