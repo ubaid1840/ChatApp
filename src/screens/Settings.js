@@ -1,11 +1,9 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
-import * as Contacts from 'expo-contacts'
 import { FlatList } from "react-native";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
-import { collection, getDocs, getFirestore, getDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 import app from "../config/firebase";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 
 

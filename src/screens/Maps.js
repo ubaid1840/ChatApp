@@ -1,9 +1,7 @@
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
 import * as Location from 'expo-location';
-import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
-import { TouchableOpacity } from 'react-native';
 import { collection, doc, getFirestore, onSnapshot, updateDoc, query } from 'firebase/firestore';
 import app from '../config/firebase';
 import { getAuth } from "firebase/auth";

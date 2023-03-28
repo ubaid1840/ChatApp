@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Modal, SafeAreaView, Text, TextInput, TouchableOpacity, View, Image, ActivityIndicator, BackHandler, TouchableWithoutFeedback } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, } from "firebase/auth";
 import { doc, getFirestore, setDoc, collection, getDocs, updateDoc } from 'firebase/firestore';
@@ -9,9 +9,12 @@ import { useIsFocused } from '@react-navigation/native';
 import styles from '../Style';
 import { StyleSheet, FlatList } from 'react-native';
 import { countrycodelist } from '../../codelist'
+import { ThemeContext } from '../store/context/ThemeContext'
+
 
 export default function SignUpScreen(props) {
 
+   
     const db = getFirestore(app)
 
     const [loading, setloading] = useState(false)
@@ -33,6 +36,10 @@ export default function SignUpScreen(props) {
     const [modalVisible2, setModalVisible2] = useState(false)
     const [profilelist, setProfilelist] = useState([])
     const [Code, setCode] = useState("Code")
+
+    const { state, darkValue, lightValue } = useContext(ThemeContext)
+
+    
 
     useEffect(() => {
         const backAction = () => {
@@ -147,7 +154,12 @@ export default function SignUpScreen(props) {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+
+        <>
+
+        <SafeAreaView style={{ flex : 1 }}>
+
+        <StatusBar style='light' />
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -223,13 +235,28 @@ export default function SignUpScreen(props) {
             </Modal>
 
 
-            <View style={styles.container}>
+            <SafeAreaView style={[styles.container, { backgroundColor: state.value.color }]}>
                 <TouchableOpacity style={{ position: 'absolute', left: 5, top: 40 }} onPress={() => {
                     props.navigation.goBack()
 
                 }}>
                     <Image style={{ height: 40, width: 40, }} source={require('../../assets/leftarrow.png')}></Image>
                 </TouchableOpacity>
+                {
+                state.value.status
+                    ?
+                    <TouchableOpacity style={{ position: 'absolute', top: 80, left: 30 }} onPress={() => { 
+                        lightValue()
+                        }}>
+                        <Image style={{ height: 30, width: 30, }} source={require('../../assets/theme.png')}></Image>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => { 
+                        darkValue() 
+                        }}>
+                        <Image style={{ height: 30, width: 30, transform: [{ rotate: '180deg' }] }} source={require('../../assets/theme.png')}></Image>
+                    </TouchableOpacity>
+                }
                 <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', alignSelf: 'flex-start', }}>Sign up</Text>
                 <Text style={{ color: 'grey', fontSize: 15, alignSelf: 'flex-start', marginTop: 5, marginBottom: 30 }}>Enter your credentials to ceate a new account</Text>
 
@@ -294,13 +321,15 @@ export default function SignUpScreen(props) {
                 }}>
                     <Text style={{ color: '#FDD180', fontWeight: 'bold', fontSize: 12, marginTop: 20 }}>Already have an account? Go to Login</Text>
                 </TouchableOpacity>
-                <StatusBar style='light' hidden={false} />
+                
 
                 {loading ? CustomActivityIndicator() : null}
 
-            </View>
+            </SafeAreaView>
 
         </SafeAreaView>
+
+        </>
 
     );
 

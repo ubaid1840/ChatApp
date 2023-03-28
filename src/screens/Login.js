@@ -1,23 +1,23 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { useRef, useState, useEffect } from 'react';
-import { Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, Dimensions, Image, LayoutAnimation, ActivityIndicator, BackHandler, Alert, ImageBackground, KeyboardAvoidingView, ScrollView, } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { useState, useEffect, useContext } from 'react';
+import { SafeAreaView, Text, TextInput, TouchableOpacity, View, Modal, Image, ActivityIndicator, BackHandler, } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import app from '../config/firebase'
 import { useIsFocused } from '@react-navigation/native';
 import styles from '../Style';
-import Pushnotifications from '../pushnotifications';
-import { Platform } from 'react-native';
+// import Pushnotifications from '../pushnotifications';
 import Toast from 'react-native-root-toast';
-import { getLocales } from 'expo-localization'
-import * as Location from 'expo-location';
-import axios from 'axios';
-import { collection, doc, getDocs, getFirestore, updateDoc } from 'firebase/firestore';
+import { ThemeContext } from '../store/context/ThemeContext'
+
 
 
 
 export default function LoginScreen(props) {
+
+    const { state, darkValue, lightValue } = useContext(ThemeContext)
+
+    
 
     // const [location, setLocation] = useState(null);
     // const [errorMsg, setErrorMsg] = useState(null);
@@ -94,8 +94,8 @@ export default function LoginScreen(props) {
                     animation: true,
                 });
                 const user = userCredential.user;
-                // props.navigation.navigate('Home', { loginemail: user.email })
-                props.navigation.navigate('Maps')
+                props.navigation.navigate('Home', { loginemail: user.email })
+                //            props.navigation.navigate('Maps')
                 setloading(false)
             })
             .catch((error) => {
@@ -114,8 +114,8 @@ export default function LoginScreen(props) {
         // </View> 
         // :
         <SafeAreaView style={{ flex: 1 }}>
-           
-            <StatusBar style='light' hidden={false} />
+
+            <StatusBar style="light" />
 
             <Modal
                 animationType="slide"
@@ -148,7 +148,22 @@ export default function LoginScreen(props) {
                 </View>
             </Modal>
 
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: state.value.color }]}>
+                {
+                state.value.status
+                    ?
+                    <TouchableOpacity style={{ position: 'absolute', top: 80, left: 30 }} onPress={() => { 
+                        lightValue()
+                        }}>
+                        <Image style={{ height: 30, width: 30, }} source={require('../../assets/theme.png')}></Image>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => { 
+                        darkValue() 
+                        }}>
+                        <Image style={{ height: 30, width: 30, transform: [{ rotate: '180deg' }] }} source={require('../../assets/theme.png')}></Image>
+                    </TouchableOpacity>
+                }
                 <TouchableOpacity onPress={() => { setModalVisible(!modalVisible); }}>
                     <Image style={{ width: 70, height: 70, marginBottom: 50 }} source={require('../../assets/chitchatlogo.png')}></Image>
                 </TouchableOpacity>

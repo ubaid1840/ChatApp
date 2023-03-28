@@ -1,14 +1,14 @@
-import { View, Text, SafeAreaView, Alert, BackHandler, Image, StatusBar, TextInput, ImageBackground, Dimensions, KeyboardAvoidingView, TouchableOpacity, FlatList, ActivityIndicator, Modal, StyleSheet } from "react-native";
+import { View, Text, SafeAreaView, BackHandler, Image, StatusBar, TextInput, TouchableOpacity, FlatList, ActivityIndicator, Modal } from "react-native";
 import styles from "../Style";
 import { useState, useEffect, useRef } from "react";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import app from "../config/firebase";
 import { LinearGradient } from 'expo-linear-gradient';
 import { collection, addDoc, getDocs, getFirestore, query, orderBy, serverTimestamp, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
-import * as Permissions from 'expo-permissions';
-import * as Location from 'expo-location';
+
+import Constants from "expo-constants";
 
 
 
@@ -200,9 +200,9 @@ export function IndividualChatScreen(props) {
 
     return (
 
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#000000E3', marginTop: 33 }}>
+        <SafeAreaView style={{ backgroundColor: '#000000E3'}}>
 
-            <View style={{ width: '100%', height: '100%' }}>
+            <View style={{ width: '100%', height: '100%', paddingTop: Constants.statusBarHeight, }}>
 
                 <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'black', alignItems: 'center', height: 60 }}>
                     <TouchableOpacity style={{}} onPress={() => {

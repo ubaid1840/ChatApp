@@ -1,15 +1,17 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { useRef, useState, useEffect } from 'react';
-import { Button, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, Dimensions, Image, LayoutAnimation, BackHandler} from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { useState, useEffect, useContext } from 'react';
+import { Text, TextInput, TouchableOpacity, View, Image, LayoutAnimation, BackHandler} from 'react-native';
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import app from '../config/firebase';
 import { useIsFocused } from '@react-navigation/native';
 import styles from '../Style';
+import { ThemeContext } from '../store/context/ThemeContext';
 
 
 export default function ForgetPasswordScreen(props) {
+
+    const { state, darkValue, lightValue } = useContext(ThemeContext)
 
     useEffect(() => {
         const backAction = () => {
@@ -72,7 +74,7 @@ export default function ForgetPasswordScreen(props) {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: state.value.color }]}>
             
              <TouchableOpacity style={{ position: 'absolute', left: 5, top: 40 }} onPress={() => {
                     props.navigation.goBack()
@@ -80,6 +82,22 @@ export default function ForgetPasswordScreen(props) {
                 }}>
                     <Image style={{ height: 40, width: 40, }} source={require('../../assets/leftarrow.png')}></Image>
                 </TouchableOpacity>
+
+                {
+                state.value.status
+                    ?
+                    <TouchableOpacity style={{ position: 'absolute', top: 80, left: 30 }} onPress={() => { 
+                        lightValue()
+                        }}>
+                        <Image style={{ height: 30, width: 30, }} source={require('../../assets/theme.png')}></Image>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => { 
+                        darkValue() 
+                        }}>
+                        <Image style={{ height: 30, width: 30, transform: [{ rotate: '180deg' }] }} source={require('../../assets/theme.png')}></Image>
+                    </TouchableOpacity>
+                }
             
             <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', alignSelf: 'flex-start', }}>Forget Password</Text>
             <Text style={{ color: 'grey', fontSize: 15, alignSelf: 'flex-start', marginTop: 5, marginBottom: 30 }}>Enter your email to reset</Text>

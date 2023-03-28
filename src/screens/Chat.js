@@ -1,11 +1,10 @@
-import { View, Text, SafeAreaView, Alert, BackHandler, Image, StatusBar, TextInput, ImageBackground, Dimensions, KeyboardAvoidingView, TouchableOpacity, FlatList, ActivityIndicator, Modal, StyleSheet } from "react-native";
+import { View, Text, SafeAreaView, Alert, BackHandler, Image, StatusBar, TextInput, Dimensions, TouchableOpacity, FlatList, ActivityIndicator, Modal, StyleSheet } from "react-native";
 import styles from "../Style";
 import { useState, useEffect, useRef } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import app from "../config/firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { LinearGradient } from 'expo-linear-gradient';
-import { collection, addDoc, getDocs, getFirestore, query, orderBy, serverTimestamp, onSnapshot, getCountFromServer } from "firebase/firestore";
+import { collection, addDoc, getFirestore, query, orderBy, serverTimestamp, onSnapshot, getCountFromServer } from "firebase/firestore";
 
 
 let countfetch = 0
