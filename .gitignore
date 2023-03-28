@@ -23,3 +23,5 @@ codelist.js
 eas.json
 eas.json.old
 package-lock.json
+
+.env

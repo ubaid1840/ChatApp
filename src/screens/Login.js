@@ -9,8 +9,7 @@ import styles from '../Style';
 // import Pushnotifications from '../pushnotifications';
 import Toast from 'react-native-root-toast';
 import { ThemeContext } from '../store/context/ThemeContext'
-import {AuthContext} from '../store/context/AuthContext'
- 
+import { AuthContext } from '../store/context/AuthContext'
 
 
 
@@ -18,9 +17,9 @@ export default function LoginScreen(props) {
 
     const { state, darkValue, lightValue } = useContext(ThemeContext)
 
-    const {state : authState, setAuth, clearAuth} = useContext(AuthContext)
+    const { state: authState, setAuth, clearAuth } = useContext(AuthContext)
 
-    
+
 
     // const [location, setLocation] = useState(null);
     // const [errorMsg, setErrorMsg] = useState(null);
@@ -84,25 +83,23 @@ export default function LoginScreen(props) {
         setisEmailValid(Email.includes('.com') && Email.includes('@') ? true : false)
         setisPasswordValid(Password.length > 5 && Password.length < 19 ? true : false)
 
-        
 
-    }, [Email, Password ])
 
-    useEffect(()=>{
+    }, [Email, Password])
 
-        
-        if(authState.value.email != null)
-        {
-                     Toast.show('Login Successful!', {
-                    duration: Toast.durations.SHORT,
-                    shadow: true,
-                    animation: true,
-                });
+    useEffect(() => {
+
+        if (authState.value.email != null) {
+            Toast.show('Login Successful!', {
+                duration: Toast.durations.SHORT,
+                shadow: true,
+                animation: true,
+            });
             props.navigation.navigate("Home")
         }
 
 
-    },[authState])
+    }, [authState])
 
     const LoginAccount = () => {
 
@@ -131,7 +128,7 @@ export default function LoginScreen(props) {
     }
 
     return (
-       
+
         <SafeAreaView style={{ flex: 1 }}>
 
             <StatusBar style="light" />
@@ -169,19 +166,19 @@ export default function LoginScreen(props) {
 
             <View style={[styles.container, { backgroundColor: state.value.color }]}>
                 {
-                state.value.status
-                    ?
-                    <TouchableOpacity style={{ position: 'absolute', top: 80, left: 30 }} onPress={() => { 
-                        lightValue()
+                    state.value.status
+                        ?
+                        <TouchableOpacity style={{ position: 'absolute', top: 80, left: 30 }} onPress={() => {
+                            lightValue()
                         }}>
-                        <Image style={{ height: 30, width: 30, }} source={require('../../assets/theme.png')}></Image>
-                    </TouchableOpacity>
-                    :
-                    <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => { 
-                        darkValue() 
+                            <Image style={{ height: 30, width: 30, }} source={require('../../assets/theme.png')}></Image>
+                        </TouchableOpacity>
+                        :
+                        <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => {
+                            darkValue()
                         }}>
-                        <Image style={{ height: 30, width: 30, transform: [{ rotate: '180deg' }] }} source={require('../../assets/theme.png')}></Image>
-                    </TouchableOpacity>
+                            <Image style={{ height: 30, width: 30, transform: [{ rotate: '180deg' }] }} source={require('../../assets/theme.png')}></Image>
+                        </TouchableOpacity>
                 }
                 <TouchableOpacity onPress={() => { setModalVisible(!modalVisible); }}>
                     <Image style={{ width: 70, height: 70, marginBottom: 50 }} source={require('../../assets/chitchatlogo.png')}></Image>
