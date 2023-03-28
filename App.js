@@ -9,6 +9,7 @@ import { SettingsScreen } from './src/screens/Settings';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { Mymaps } from './src/screens/Maps';
 import ThemContextProvider from './src/store/context/ThemeContext';
+import AuthContextProvider from './src/store/context/AuthContext'
 
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
   return (
   
       <RootSiblingParent>
+        <AuthContextProvider>
         <ThemContextProvider>
         <NavigationContainer >
           <AppStack.Navigator initialRouteName='Login' options={{}}>
@@ -31,6 +33,7 @@ export default function App() {
           </AppStack.Navigator>
         </NavigationContainer>
         </ThemContextProvider>
+        </AuthContextProvider>
       </RootSiblingParent>
     
   );

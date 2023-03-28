@@ -9,13 +9,16 @@ import styles from '../Style';
 // import Pushnotifications from '../pushnotifications';
 import Toast from 'react-native-root-toast';
 import { ThemeContext } from '../store/context/ThemeContext'
-
+import {AuthContext} from '../store/context/AuthContext'
+ 
 
 
 
 export default function LoginScreen(props) {
 
     const { state, darkValue, lightValue } = useContext(ThemeContext)
+
+    const {state : authState, setAuth, clearAuth} = useContext(AuthContext)
 
     
 
@@ -71,8 +74,8 @@ export default function LoginScreen(props) {
     const [loading, setloading] = useState(false)
     const [isEmailValid, setisEmailValid] = useState(false)
     const [isPasswordValid, setisPasswordValid] = useState(false)
-    const [Email, setEmail] = useState("zainu@gmail.com")
-    const [Password, setPassword] = useState("12345678")
+    const [Email, setEmail] = useState("")
+    const [Password, setPassword] = useState("")
     const [emailfocus, setemailfocus] = useState('primary')
     const [passfocus, setpassfocus] = useState('primary')
 
@@ -81,38 +84,54 @@ export default function LoginScreen(props) {
         setisEmailValid(Email.includes('.com') && Email.includes('@') ? true : false)
         setisPasswordValid(Password.length > 5 && Password.length < 19 ? true : false)
 
-    }, [Email, Password])
+        
 
-    const LoginAccount = () => {
-        const auth = getAuth(app);
-        signInWithEmailAndPassword(auth, Email, Password)
-            .then((userCredential) => {
-                // Signed in 
-                Toast.show('Login Successful!', {
+    }, [Email, Password ])
+
+    useEffect(()=>{
+
+        
+        if(authState.value.email != null)
+        {
+                     Toast.show('Login Successful!', {
                     duration: Toast.durations.SHORT,
                     shadow: true,
                     animation: true,
                 });
-                const user = userCredential.user;
-                props.navigation.navigate('Home', { loginemail: user.email })
-                //            props.navigation.navigate('Maps')
-                setloading(false)
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                //   console.log(errorMessage)
-                alert(errorMessage)
-                setloading(false)
-            });
+            props.navigation.navigate("Home")
+        }
+
+
+    },[authState])
+
+    const LoginAccount = () => {
+
+        setAuth(Email, Password)
+        // const auth = getAuth(app);
+        // signInWithEmailAndPassword(auth, Email, Password)
+        //     .then((userCredential) => {
+        //         // Signed in 
+        //         Toast.show('Login Successful!', {
+        //             duration: Toast.durations.SHORT,
+        //             shadow: true,
+        //             animation: true,
+        //         });
+        //         const user = userCredential.user;
+        //         props.navigation.navigate('Home', { loginemail: user.email })
+        //         //            props.navigation.navigate('Maps')
+        //         setloading(false)
+        //     })
+        //     .catch((error) => {
+        //         const errorCode = error.code;
+        //         const errorMessage = error.message;
+        //         //   console.log(errorMessage)
+        //         alert(errorMessage)
+        //         setloading(false)
+        //     });
     }
 
     return (
-        // location == null || location == undefined ?
-        // <View style={{}}>
-        //     <Image style={{flex : 1, resizeMode:'contain'}} source={require('../../assets/splash.png')}></Image>
-        // </View> 
-        // :
+       
         <SafeAreaView style={{ flex: 1 }}>
 
             <StatusBar style="light" />
@@ -183,7 +202,7 @@ export default function LoginScreen(props) {
                 {isEmailValid && isPasswordValid ?
                     <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => {
                         if (isEmailValid && isPasswordValid) {
-                            setloading(true)
+                            // setloading(true)
                             LoginAccount()
                         }
                         else {
@@ -206,7 +225,7 @@ export default function LoginScreen(props) {
                 }}>
                     <Text style={{ color: '#FDD180', fontWeight: 'bold', fontSize: 12 }}>Don't have an account? Create a new account</Text>
                 </TouchableOpacity>
-                {loading ? CustomActivityIndicator() : null}
+                {authState.value.loading ? CustomActivityIndicator() : null}
 
             </View>
 
