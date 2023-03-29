@@ -81,6 +81,44 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
     },
+    hueOpacityPreviewContainer: {
+        flexWrap: 'nowrap',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 30,
+      },
+      previewStyle: {
+        width: 55,
+        height: 55,
+        borderRadius: 30,
+        marginEnd: 20,
+      },
+      swatchesContainer: {
+        flex: 0.25,
+        alignItems: 'center',
+        flexWrap: 'nowrap',
+        gap: 10,
+      },
+      swatchStyle: {
+        borderRadius: 20,
+        height: 40,
+        width: 40,
+        margin: 0,
+        marginBottom: 0,
+        marginHorizontal: 0,
+        marginVertical: 0,
+      },
+      shadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    
+        elevation: 5,
+      },
 });
 
 export default styles

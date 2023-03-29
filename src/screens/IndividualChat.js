@@ -200,9 +200,9 @@ export function IndividualChatScreen(props) {
 
     return (
 
-        <SafeAreaView style={{ backgroundColor: '#000000E3'}}>
+        <SafeAreaView style={{ backgroundColor: '#000000E3', flex:1}}>
 
-            <View style={{ width: '100%', height: '100%', paddingTop: Constants.statusBarHeight, }}>
+            <View style={{ width: '100%', height: '100%', paddingTop: Constants.statusBarHeight }}>
 
                 <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: 'black', backgroundColor: 'black', alignItems: 'center', height: 60 }}>
                     <TouchableOpacity style={{}} onPress={() => {

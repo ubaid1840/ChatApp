@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, BackHandler, Image, TextInput, TouchableOpacity, FlatList, ActivityIndicator, Modal, StyleSheet, TouchableWithoutFeedback, } from "react-native";
+import { View, Text, SafeAreaView, BackHandler, Image, TextInput, TouchableOpacity, FlatList, ActivityIndicator, Modal, StyleSheet, TouchableWithoutFeedback, Alert, } from "react-native";
 import styles from "../Style";
 import { useState, useEffect, useRef, useContext } from "react";
 import { getAuth, signOut } from "firebase/auth";
@@ -218,11 +218,11 @@ export function HomeScreen(props) {
                 getContactsRow(data)
             }
             else {
-                setError("No contacts found")
+                Alert("No contacts found")
             }
         }
         else {
-            setError("Permission to access contacts denied")
+            Alert("Permission to access contacts denied")
         }
     }
 
@@ -247,7 +247,7 @@ export function HomeScreen(props) {
                 shadow: true,
                 animation: true,
             });
-            props.navigation.goBack()
+            props.navigation.navigate('Before')
         }
     }, [authState])
 

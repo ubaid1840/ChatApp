@@ -1,24 +1,21 @@
 import { createContext, useReducer } from "react";
-import { DARK, LIGHT } from '../action/ThemeAction'
+import { SET } from '../action/ThemeAction'
 import { myThemeReducer } from '../reducer/ThemeReducer'
 
 export const ThemeContext = createContext()
 
 const ThemContextProvider = (props) => {
 
-    const [state, dispatch] = useReducer(myThemeReducer, { value: {color:'#000000E3', status : true} })
+    const [state, dispatch] = useReducer(myThemeReducer, { value: {color:'#000000E3'} })
 
-    const darkValue = () => {
-        dispatch({ type: DARK })
+    const toggleTheme = (color) => {
+        dispatch({ type: SET, payload: {color : color} })
     }
 
-    const lightValue = () => {
-        dispatch({ type: LIGHT })
-    }
 
     return ( 
         <ThemeContext.Provider
-             value={{state, darkValue, lightValue}}
+             value={{state, toggleTheme}}
         >
             {props.children}
         </ThemeContext.Provider>

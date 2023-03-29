@@ -1,2 +1,1 @@
-export const DARK = 'DARK'
-export const LIGHT = 'LIGHT'
+export const SET = 'SET'

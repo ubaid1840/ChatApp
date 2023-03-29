@@ -1,44 +1,49 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect, useContext } from 'react';
-import { SafeAreaView, Text, TextInput, TouchableOpacity, View, Modal, Image, ActivityIndicator, BackHandler, } from 'react-native';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import app from '../config/firebase'
+import {
+    SafeAreaView, Text, TextInput, TouchableOpacity, View, Modal, Image, ActivityIndicator, BackHandler, KeyboardAvoidingView,
+    ScrollView, Button
+} from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import styles from '../Style';
 // import Pushnotifications from '../pushnotifications';
 import Toast from 'react-native-root-toast';
 import { ThemeContext } from '../store/context/ThemeContext'
 import { AuthContext } from '../store/context/AuthContext'
+import ColorPicker, {
+    Panel1, Swatches, Preview, OpacitySlider, HueSlider, InputWidget,
+} from 'reanimated-color-picker';
 
 
+const customSwatches = ['#001219', '#005f73', '#0a9396', '#94d2bd', '#e9d8a6'];
 
 export default function LoginScreen(props) {
 
-    const { state, darkValue, lightValue } = useContext(ThemeContext)
+    const onSelectColor = ({ hex }) => {
+        console.log('hex :', hex);
+        setThemecolor(hex)
+        // color.value = hex;
+        // console.log(themecolor)
+    };
 
-    const { state: authState, setAuth, clearAuth } = useContext(AuthContext)
-
-
-
-    // const [location, setLocation] = useState(null);
-    // const [errorMsg, setErrorMsg] = useState(null);
-
-    // useEffect(() => {
-    //     (async () => {
-
-    //         let { status } = await Location.requestForegroundPermissionsAsync();
-    //         if (status !== 'granted') {
-    //             setErrorMsg('Permission to access location was denied');
-    //             return;
-    //         }
-
-    //         let location = await Location.getCurrentPositionAsync({});
-    //         setLocation(location);
-    //     })();
-    // }, []);
+    // const color = useSharedValue('#ff006f');
+    // const animatedStyle = useAnimatedStyle(() => ({
+    //     backgroundColor: color.value,
+    // }));
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible1, setModalVisible1] = useState(false);
+    const { state, toggleTheme } = useContext(ThemeContext)
+    const { state: authState, setAuth } = useContext(AuthContext)
+    const [isEmailValid, setisEmailValid] = useState(false)
+    const [isPasswordValid, setisPasswordValid] = useState(false)
+    const [Email, setEmail] = useState("")
+    const [Password, setPassword] = useState("")
+    const [emailfocus, setemailfocus] = useState('primary')
+    const [passfocus, setpassfocus] = useState('primary')
+    const [showModal, setShowModal] = useState(false);
+    const [themecolor, setThemecolor] = useState(null)
 
     useEffect(() => {
         const backAction = () => {
@@ -54,8 +59,6 @@ export default function LoginScreen(props) {
         return () => backHandler.remove();
     }, []);
 
-
-
     const isFocused = useIsFocused()
     useEffect(() => {
         setEmail("")
@@ -69,14 +72,6 @@ export default function LoginScreen(props) {
             </View>
         );
     };
-
-    const [loading, setloading] = useState(false)
-    const [isEmailValid, setisEmailValid] = useState(false)
-    const [isPasswordValid, setisPasswordValid] = useState(false)
-    const [Email, setEmail] = useState("")
-    const [Password, setPassword] = useState("")
-    const [emailfocus, setemailfocus] = useState('primary')
-    const [passfocus, setpassfocus] = useState('primary')
 
     useEffect(() => {
 
@@ -95,7 +90,7 @@ export default function LoginScreen(props) {
                 shadow: true,
                 animation: true,
             });
-            props.navigation.navigate("Home")
+            props.navigation.navigate("After")
         }
 
 
@@ -104,27 +99,6 @@ export default function LoginScreen(props) {
     const LoginAccount = () => {
 
         setAuth(Email, Password)
-        // const auth = getAuth(app);
-        // signInWithEmailAndPassword(auth, Email, Password)
-        //     .then((userCredential) => {
-        //         // Signed in 
-        //         Toast.show('Login Successful!', {
-        //             duration: Toast.durations.SHORT,
-        //             shadow: true,
-        //             animation: true,
-        //         });
-        //         const user = userCredential.user;
-        //         props.navigation.navigate('Home', { loginemail: user.email })
-        //         //            props.navigation.navigate('Maps')
-        //         setloading(false)
-        //     })
-        //     .catch((error) => {
-        //         const errorCode = error.code;
-        //         const errorMessage = error.message;
-        //         //   console.log(errorMessage)
-        //         alert(errorMessage)
-        //         setloading(false)
-        //     });
     }
 
     return (
@@ -164,22 +138,129 @@ export default function LoginScreen(props) {
                 </View>
             </Modal>
 
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible1}
+                onRequestClose={() => {
+                    setModalVisible1(!modalVisible1);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Are you sure you want to exit?</Text>
+                        <TouchableOpacity onPress={() => {
+                            setModalVisible1(!modalVisible1);
+                            BackHandler.exitApp()
+                        }}>
+                            <LinearGradient colors={['#FDD180', '#FFA600']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={styles.gradientbutton}>
+                                <Text style={styles.gradientbuttontext}>Yes</Text>
+                                {/* <Ionicons name="arrow-forward-circle-outline" size={25} color="green"  /> */}
+                            </LinearGradient>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            setModalVisible(!modalVisible)
+                        }}>
+                            <LinearGradient colors={['#FDD180', '#FFA600']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={styles.gradientbutton}>
+                                <Text style={styles.gradientbuttontext}>No</Text>
+                                {/* <Ionicons name="arrow-forward-circle-outline" size={25} color="green"  /> */}
+                            </LinearGradient>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+
+            <Modal
+                onRequestClose={() => setShowModal(false)}
+                visible={showModal}
+                animationType="slide">
+                <ScrollView
+                    style={{
+                        flex: 1,
+                        backgroundColor: '#e8e8e8',
+                        paddingBottom: 0,
+                        width: '100%',
+                        maxWidth: 500,
+                        margin: 'auto',
+                    }}
+                    contentContainerStyle={{ flex: 1 }}>
+                    <ColorPicker
+                         value={state.value.color}
+                        sliderThickness={25}
+                        thumbSize={30}
+                        style={{ width: '75%', justifyContent: 'space-around' }}
+                        onComplete={onSelectColor}>
+                        <View style={{ flex: 1, justifyContent: 'center', gap: 30 }}>
+                            <Panel1 style={styles.shadow} />
+
+                            <View style={styles.hueOpacityPreviewContainer}>
+                                <Preview
+                                    style={[styles.previewStyle, styles.shadow]}
+                                    hideInitialColor
+                                    hideText
+                                />
+
+                                <View
+                                    style={{
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        flex: 1,
+                                    }}>
+                                    <HueSlider
+                                        thumbShape="triangleDown"
+                                        style={[{ marginBottom: 20 }, styles.shadow]}
+                                        thumbColor="#00121a"
+                                    />
+                                    <OpacitySlider
+                                        thumbShape="triangleUp"
+                                        style={styles.shadow}
+                                        thumbColor="#00121a"
+                                    />
+                                </View>
+                            </View>
+
+                            <KeyboardAvoidingView
+                                behavior="position"
+                                keyboardVerticalOffset={150}>
+                                <InputWidget
+                                    containerStyle={{
+                                        backgroundColor: '#e8e8e8',
+                                        marginTop: 20,
+                                        gap: 0,
+                                    }}
+                                    inputStyle={{ marginLeft: 5 }}
+                                />
+                            </KeyboardAvoidingView>
+                        </View>
+
+                        <Swatches
+                            style={styles.swatchesContainer}
+                            swatchStyle={styles.swatchStyle}
+                            colors={customSwatches}
+                        />
+                    </ColorPicker>
+                    <Button title="Default" onPress={() => {
+
+                        setThemecolor('#000000E3')
+                        toggleTheme('#000000E3')
+                        
+                        //setShowModal(false)
+                    }} />
+                    <Button title="Close" onPress={() => {
+                        toggleTheme(themecolor)
+                        setShowModal(false)
+                    }} />
+                </ScrollView>
+            </Modal>
+
             <View style={[styles.container, { backgroundColor: state.value.color }]}>
-                {
-                    state.value.status
-                        ?
-                        <TouchableOpacity style={{ position: 'absolute', top: 80, left: 30 }} onPress={() => {
-                            lightValue()
-                        }}>
-                            <Image style={{ height: 30, width: 30, }} source={require('../../assets/theme.png')}></Image>
-                        </TouchableOpacity>
-                        :
-                        <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => {
-                            darkValue()
-                        }}>
-                            <Image style={{ height: 30, width: 30, transform: [{ rotate: '180deg' }] }} source={require('../../assets/theme.png')}></Image>
-                        </TouchableOpacity>
-                }
+
+                <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => {
+                    setShowModal(true)
+                }}>
+                    <Image style={{ height: 30, width: 30 }} source={require('../../assets/theme.png')}></Image>
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={() => { setModalVisible(!modalVisible); }}>
                     <Image style={{ width: 70, height: 70, marginBottom: 50 }} source={require('../../assets/chitchatlogo.png')}></Image>
                 </TouchableOpacity>
@@ -223,10 +304,8 @@ export default function LoginScreen(props) {
                     <Text style={{ color: '#FDD180', fontWeight: 'bold', fontSize: 12 }}>Don't have an account? Create a new account</Text>
                 </TouchableOpacity>
                 {authState.value.loading ? CustomActivityIndicator() : null}
-
             </View>
 
         </SafeAreaView>
     );
 }
-

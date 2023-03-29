@@ -37,7 +37,7 @@ export default function SignUpScreen(props) {
     const [profilelist, setProfilelist] = useState([])
     const [Code, setCode] = useState("Code")
 
-    const { state, darkValue, lightValue } = useContext(ThemeContext)
+    const { state, toggleTheme } = useContext(ThemeContext)
 
     
 
@@ -242,21 +242,11 @@ export default function SignUpScreen(props) {
                 }}>
                     <Image style={{ height: 40, width: 40, }} source={require('../../assets/leftarrow.png')}></Image>
                 </TouchableOpacity>
-                {
-                state.value.status
-                    ?
-                    <TouchableOpacity style={{ position: 'absolute', top: 80, left: 30 }} onPress={() => { 
-                        lightValue()
-                        }}>
-                        <Image style={{ height: 30, width: 30, }} source={require('../../assets/theme.png')}></Image>
-                    </TouchableOpacity>
-                    :
-                    <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => { 
-                        darkValue() 
-                        }}>
-                        <Image style={{ height: 30, width: 30, transform: [{ rotate: '180deg' }] }} source={require('../../assets/theme.png')}></Image>
-                    </TouchableOpacity>
-                }
+                <TouchableOpacity style={{ position: 'absolute', top: 80, right: 30 }} onPress={() => {
+                    toggleTheme()
+                }}>
+                    <Image style={{ height: 30, width: 30 }} source={require('../../assets/theme.png')}></Image>
+                </TouchableOpacity>
                 <Text style={{ color: 'white', fontSize: 30, fontWeight: 'bold', alignSelf: 'flex-start', }}>Sign up</Text>
                 <Text style={{ color: 'grey', fontSize: 15, alignSelf: 'flex-start', marginTop: 5, marginBottom: 30 }}>Enter your credentials to ceate a new account</Text>
 
