@@ -16,21 +16,15 @@ import ColorPicker, {
 } from 'reanimated-color-picker';
 
 
-const customSwatches = ['#001219', '#005f73', '#0a9396', '#94d2bd', '#e9d8a6'];
+
 
 export default function LoginScreen(props) {
 
-    const onSelectColor = ({ hex }) => {
-        console.log('hex :', hex);
-        setThemecolor(hex)
-        // color.value = hex;
-        // console.log(themecolor)
-    };
+    const customSwatches = ['#001219', '#005f73', '#0a9396', '#94d2bd', '#e9d8a6'];
 
-    // const color = useSharedValue('#ff006f');
-    // const animatedStyle = useAnimatedStyle(() => ({
-    //     backgroundColor: color.value,
-    // }));
+    const onSelectColor = ({ hex }) => {
+        setThemecolor(hex)
+    };
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible1, setModalVisible1] = useState(false);
@@ -65,14 +59,6 @@ export default function LoginScreen(props) {
         setPassword("")
     }, [isFocused])
 
-    const CustomActivityIndicator = () => {
-        return (
-            <View style={styles.activityIndicatorStyle}>
-                <ActivityIndicator color="#FFA600" size="large" />
-            </View>
-        );
-    };
-
     useEffect(() => {
 
         setisEmailValid(Email.includes('.com') && Email.includes('@') ? true : false)
@@ -92,14 +78,20 @@ export default function LoginScreen(props) {
             });
             props.navigation.navigate("After")
         }
-
-
     }, [authState])
 
     const LoginAccount = () => {
 
         setAuth(Email, Password)
     }
+
+    const CustomActivityIndicator = () => {
+        return (
+            <View style={styles.activityIndicatorStyle}>
+                <ActivityIndicator color="#FFA600" size="large" />
+            </View>
+        );
+    };
 
     return (
 
@@ -169,7 +161,6 @@ export default function LoginScreen(props) {
                 </View>
             </Modal>
 
-
             <Modal
                 onRequestClose={() => setShowModal(false)}
                 visible={showModal}
@@ -185,7 +176,7 @@ export default function LoginScreen(props) {
                     }}
                     contentContainerStyle={{ flex: 1 }}>
                     <ColorPicker
-                         value={state.value.color}
+                        value={state.value.color}
                         sliderThickness={25}
                         thumbSize={30}
                         style={{ width: '75%', justifyContent: 'space-around' }}
@@ -243,7 +234,7 @@ export default function LoginScreen(props) {
 
                         setThemecolor('#000000E3')
                         toggleTheme('#000000E3')
-                        
+
                         //setShowModal(false)
                     }} />
                     <Button title="Close" onPress={() => {

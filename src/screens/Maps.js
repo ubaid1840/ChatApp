@@ -10,8 +10,6 @@ import { getAuth } from "firebase/auth";
 
 export function Mymaps(props) {
 
-    //  const {currentlocation} = props.route.params
-
     const mapstyle = [
         {
             "elementType": "geometry",
@@ -250,30 +248,6 @@ export function Mymaps(props) {
     const [errorMsg, setErrorMsg] = useState(null);
     const [dblocations, setdblocations] = useState(null)
 
-    useEffect(() => {
-        const mRef = collection(db, 'Profiles')
-        const q = query(mRef)
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            let dbdata = []
-            querySnapshot.forEach((doc) => {
-                if (doc.data().email == getAuth().currentUser.email) { }
-                else {
-                    dbdata.push(
-                        {
-                            name: doc.data().firstname,
-                            email: doc.data().email,
-                            latitude: doc.data().location.coords.latitude,
-                            longitude: doc.data().location.coords.longitude
-                        });
-                    //console.log(doc.data().location)
-                }
-            })
-            setdblocations(dbdata)
-            console.log(dbdata)
-        })
-        return () => unsubscribe()
-    }, [])
-
     const showalllocations = () => {
         if (dblocations == null || dblocations == undefined) {
             console.log(dblocations)
@@ -302,6 +276,31 @@ export function Mymaps(props) {
         }
     }
 
+    useEffect(() => {
+        const mRef = collection(db, 'Profiles')
+        const q = query(mRef)
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            let dbdata = []
+            querySnapshot.forEach((doc) => {
+                if (doc.data().email == getAuth().currentUser.email) { }
+                else {
+                    dbdata.push(
+                        {
+                            name: doc.data().firstname,
+                            email: doc.data().email,
+                            latitude: doc.data().location.coords.latitude,
+                            longitude: doc.data().location.coords.longitude
+                        });
+                    //console.log(doc.data().location)
+                }
+            })
+            setdblocations(dbdata)
+            console.log(dbdata)
+        })
+        return () => unsubscribe()
+    }, [])
+
+    
 
     useEffect(() => {
         (async () => {
@@ -313,12 +312,8 @@ export function Mymaps(props) {
             }
 
             await Location.watchPositionAsync({ distanceInterval: 50 }, response => {
-
-                // console.log(response.coords.latitude)
-                // console.log(response.coords.longitude)
-                setLocation(response)
+               setLocation(response)
             })
-            //  setLocation(location);
         })();
     }, []);
 
@@ -330,7 +325,6 @@ export function Mymaps(props) {
             else {
 
                 const updatedp = doc(db, "Profiles", getAuth().currentUser.email);
-                // Set the "capital" field of the city 'DC'
                 await updateDoc(updatedp, {
                     location: location
                 });
@@ -366,12 +360,6 @@ export function Mymaps(props) {
                             longitudeDelta: 0.005
                         }, 2000)
                     }}
-                //     initialRegion={{
-                //         latitude: location.coords.latitude,
-                // longitude: location.coords.longitude,
-                // latitudeDelta : 0.005,
-                // longitudeDelta : 0.005
-                //     }}
 
                 >
                     {showalllocations()}
@@ -387,21 +375,6 @@ export function Mymaps(props) {
                         />
                     }
                 </MapView>
-
-                {/* <View>
-                    <TouchableOpacity
-                        style={{ justifyContent: 'center', alignItems: 'center' }}
-                        onPress={() => {
-                            console.log("ub")
-                            console.log(mapRef)
-                        }}
-                    >
-                        <View style={{ height: 40, width: 80, backgroundColor: 'green', justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ color: 'white' }}>Show ref</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View> */}
-
             </View>
     );
 }

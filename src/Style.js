@@ -7,20 +7,10 @@ const styles = StyleSheet.create({
     container: {
         height:'100%',
         width:'100%',
-        // backgroundColor: '#000000E3',
         justifyContent: 'center',
         paddingLeft: '10%',
         paddingRight: '10%',
         alignItems:'center',
-        // position: 'absolute',
-        // marginLeft: 'auto',
-        // marginRight: 'auto',
-        // marginTop: 'auto',
-        // marginBottom: 'auto',
-        // left: 0,
-        // right: 0,
-        // top: 0,
-        // bottom: 0,
     },
     textinputstyleblur: {
         marginTop: 10, height: 40, width: '90%', borderWidth: 1, borderTopLeftRadius: 10, borderBottomRightRadius: 10, borderColor: '#D3D3D3', paddingLeft: 10, alignSelf: 'center', shadowColor: "#000", shadowOpacity: 0, shadowRadius: 0, elevation: 0,backgroundColor:'white'

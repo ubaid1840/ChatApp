@@ -13,14 +13,10 @@ import Constants from "expo-constants";
 
 
 
-let tempMsg = ""
-
 
 export function IndividualChatScreen(props) {
 
-    // let testvalue = 1
     let { communication, currentuserdp, otheruserdp, chattingwith, otheruser } = props.route.params
-
     const [datalist, setdatalist] = useState([])
     const [Message, setMessage] = useState("")
     const [loading, setloading] = useState(true)

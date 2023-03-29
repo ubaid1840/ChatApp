@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, BackHandler, Image, TextInput, TouchableOpacity, FlatList, ActivityIndicator, Modal, StyleSheet, TouchableWithoutFeedback, Alert, } from "react-native";
 import styles from "../Style";
-import { useState, useEffect, useRef, useContext } from "react";
-import { getAuth, signOut } from "firebase/auth";
+import { useState, useEffect, useContext } from "react";
+import { getAuth } from "firebase/auth";
 import app from "../config/firebase";
 import { LinearGradient } from 'expo-linear-gradient';
 import { collection, getDocs, getFirestore, doc, updateDoc } from "firebase/firestore";
@@ -16,7 +16,7 @@ import { AuthContext } from "../store/context/AuthContext";
 
 export function HomeScreen(props) {
 
-    const extractKey = ({ number }) => number
+    // const extractKey = ({ number }) => number
 
     const storage = getStorage(app);
     const db = getFirestore(app)
@@ -56,7 +56,6 @@ export function HomeScreen(props) {
     };
 
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         setModalVisible2(!modalVisible2)
         setloading(true)
 
@@ -66,9 +65,7 @@ export function HomeScreen(props) {
             aspect: [4, 4],
             quality: 1,
         });
-
-        //  console.log(result);
-
+        
         if (!result.canceled) {
             setloading(false)
             setUploading(true)
@@ -104,11 +101,9 @@ export function HomeScreen(props) {
         };
 
         //upload image to firestore
-        // Upload file and metadata to the object 'images/mountains.jpg'
         const storageRef = ref(storage, 'ProfileImages/' + getAuth().currentUser.email + '.dp');
         const uploadTask = uploadBytesResumable(storageRef, blobImage, metadata);
 
-        // Listen for state changes, errors, and completion of the upload.
         uploadTask.on('state_changed',
             (snapshot) => {
 
@@ -127,27 +122,20 @@ export function HomeScreen(props) {
                 }
             },
             (error) => {
-                // A full list of error codes is available at
-                // https://firebase.google.com/docs/storage/web/handle-errors
                 switch (error.code) {
                     case 'storage/unauthorized':
-                        // User doesn't have permission to access the object
                         break;
                     case 'storage/canceled':
-                        // User canceled the upload
                         break;
 
-                    // ...
-
+          
                     case 'storage/unknown':
-                        // Unknown error occurred, inspect error.serverResponse
                         break;
                 }
             },
             () => {
                 // Upload completed successfully, now we can get the download URL
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    // console.log('File available at', downloadURL)
                     updateprofiledp(downloadURL)
                 });
             }
@@ -158,7 +146,6 @@ export function HomeScreen(props) {
     const updateprofiledp = async (url) => {
         const updatedp = doc(db, "Profiles", getAuth().currentUser.email);
 
-        // Set the "capital" field of the city 'DC'
         await updateDoc(updatedp, {
             dp: url
         });
@@ -193,7 +180,6 @@ export function HomeScreen(props) {
 
                 if (doc.data().email == getAuth().currentUser.email) {
                     setProfileimageurl(doc.data().dp)
-                    // console.log(doc.data().dp)
                 }
                 chat.push(doc.data())
             });
@@ -263,23 +249,18 @@ export function HomeScreen(props) {
 
         const updatedp = doc(db, "Profiles", getAuth().currentUser.email);
 
-        // Set the "capital" field of the city 'DC'
         await updateDoc(updatedp, {
             dp: ""
         });
         setProfileimageurl("")
-        // Create a reference to the file to delete
         const desertRef = ref(storage, 'ProfileImages/' + getAuth().currentUser.email + '.dp');
 
-        // Delete the file
         deleteObject(desertRef).then(() => {
-            // File deleted successfully
         }).catch((error) => {
             alert(error)
         });
 
         setloading(false)
-
         setModalVisible3(!modalVisible3)
     }
 
@@ -292,16 +273,12 @@ export function HomeScreen(props) {
 
             contactdata.map((contact, index) => {
                 if (contact.name == undefined || contact.phoneNumbers == undefined || contact.phoneNumbers[0].number == undefined) {
-                    // console.log(index)
-                    // console.log("undefined found")
                 }
                 else {
                     for (let i = 0; i < contact.phoneNumbers.length; i++) {
                         let str = contact.phoneNumbers[i].number.replaceAll(/\s/g, '')
                         let editstr = str.replace(/-/g, "")
                         num[i] = editstr
-
-
                     }
 
                     if (num.length != 0 || num.length != 1) {
@@ -314,8 +291,6 @@ export function HomeScreen(props) {
                         }
                         temp[k++] = num[num.length - 1];
                         num = temp
-                        // console.log(contact.name)
-                        // console.log(num)
                     }
                     info[j++] = ({ "key": l++, "name": contact.name, "number": num })
                     num = []
@@ -326,17 +301,13 @@ export function HomeScreen(props) {
 
             return <Text>Await contacts...</Text>
         }
-        // setContactdatalist(info)
         showavailablecontact(info)
 
-        // console.log(info)
-        //  setContacts(info)
     }
     const showavailablecontact = (contactlist) => {
         let newlist = []
         let j = 0
         let k = 0
-        // console.log(datalist)
         contactlist.map((list) => {
             let length = list.number.length
             datalist.map((data) => {
@@ -349,13 +320,11 @@ export function HomeScreen(props) {
             })
 
         })
-        // console.log(newlist) 
         setContactdatalist(newlist)
         setContactflatlist(newlist)
     }
 
     const renderItem = ({ item, index }) => {
-        // console.log(item.name)
         return (
             <TouchableOpacity onPress={() => {
                 setModalVisible(!modalVisible)
@@ -378,7 +347,6 @@ export function HomeScreen(props) {
             if (list.name.toLowerCase().includes(searchnumber)) {
                 newlist.push({ "id": k++, "name": list.name, "number": list.number, "email": list.email, "age": list.age, "firstname": list.firstname, "lastname": list.lastname, "dp": list.dp })
             }
-
         })
         setContactflatlist(newlist)
 
@@ -408,40 +376,27 @@ export function HomeScreen(props) {
                                         <View style={{ flexDirection: 'row' }}>
                                             <TextInput style={{ height: 40, width: 170, borderWidth: 1, borderRadius: 15, padding: 10, marginRight: 20 }} placeholder='Enter Number' value={searchnumber} onChangeText={(val) => { setSearchNumber(val) }}>
                                             </TextInput>
-                                            {/* <TouchableOpacity style={{}} onPress={() => {
-                                    // searchemailindb()
-                                   // filtercontacts()
-                                    
-                                }}>
-                                    <LinearGradient colors={['#FDD180', '#FFA600']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={{ height: 40, width: 40, borderRadius: 30, backgroundColor: '#FDD180', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Image style={{ height: 30, width: 30, }} source={require('../../assets/search.png')}></Image>
-                                    </LinearGradient>
-                                </TouchableOpacity> */}
                                             <TouchableOpacity onPress={() => {
                                                 setModalVisible(!modalVisible)
                                             }}>
                                                 <LinearGradient colors={['#FDD180', '#FFA600']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={{ width: 100, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 30, marginLeft: 10 }}>
                                                     <Text style={styles.gradientbuttontext}>Close</Text>
-                                                    {/* <Ionicons name="arrow-forward-circle-outline" size={25} color="green"  /> */}
                                                 </LinearGradient>
                                             </TouchableOpacity>
                                         </View>
                                         <TouchableOpacity onPress={() => {
-                                            //  fetchcontacts()
                                             Toast.show('Refresh Successful!', {
                                                 duration: Toast.durations.SHORT,
                                             });
                                         }}>
                                             <LinearGradient colors={['#FDD180', '#FFA600']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={{ width: 120, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 30, marginLeft: 10, alignSelf: 'center', marginTop: 10 }}>
                                                 <Text style={styles.gradientbuttontext}>Refresh</Text>
-                                                {/* <Ionicons name="arrow-forward-circle-outline" size={25} color="green"  /> */}
                                             </LinearGradient>
                                         </TouchableOpacity>
                                         <View style={{ height: '90%', marginTop: 10, marginBottom: 10, paddingBottom: 10 }}>
                                             <FlatList
                                                 data={contactflatlist}
                                                 renderItem={renderItem}
-                                            //   keyExtractor={extractKey}
                                             />
                                         </View>
                                     </View>
@@ -472,7 +427,6 @@ export function HomeScreen(props) {
                                     }}>
                                         <LinearGradient colors={['#FDD180', '#FFA600']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={styles.gradientbutton}>
                                             <Text style={styles.gradientbuttontext}>No</Text>
-                                            {/* <Ionicons name="arrow-forward-circle-outline" size={25} color="green"  /> */}
                                         </LinearGradient>
                                     </TouchableOpacity>
                                 </View>
@@ -586,7 +540,6 @@ export function HomeScreen(props) {
                                             item.email != getAuth().currentUser.email ?
                                                 <TouchableOpacity style={{ width: '100%', alignItems: 'center' }} onPress={() => {
                                                     startchat(item)
-                                                    //   console.log(datalist[index].email)
                                                 }}>
                                                     <View style={{ backgroundColor: '#262829', justifyContent: 'center', padding: 15, marginTop: 5, borderRadius: 15, width: '95%', borderColor: '#FFFFFF2C', borderWidth: 1, }}>
                                                         <Text style={{ fontSize: 15, color: 'white', fontWeight: '500' }}>{item.firstname} {item.lastname}</Text>

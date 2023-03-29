@@ -12,47 +12,10 @@ import { ThemeContext } from '../store/context/ThemeContext';
 export default function ForgetPasswordScreen(props) {
 
     const { state, darkValue, lightValue } = useContext(ThemeContext)
-
-    useEffect(() => {
-        const backAction = () => {
-            props.navigation.goBack()
-            return true;
-        };
-        
-
-        const backHandler = BackHandler.addEventListener(
-            'hardwareBackPress',
-            backAction,
-        );
-        
-
-        return () => backHandler.remove();
-    }, []);
-
-
-      const isFocused = useIsFocused()
-    useEffect(() => {
-        setEmail("")
-    }, [isFocused])
-
-    const CustomActivityIndicator = () => {
-        return (
-            <View style={styles.activityIndicatorStyle}>
-                <ActivityIndicator color="#FFA600" size="large" />
-            </View>
-        );
-    };
-
     const [loading, setloading] = useState(false)
     const [isEmailValid, setisEmailValid] = useState(false)
     const [Email, setEmail] = useState("")
     const [emailfocus, setemailfocus] = useState('primary')
-
-    useEffect(() => {
-
-        setisEmailValid(Email.includes('.com') && Email.includes('@') ? true : false)
-
-    }, [Email])
 
     const forgetPassword = () => {
         const auth = getAuth(app);
@@ -73,9 +36,41 @@ export default function ForgetPasswordScreen(props) {
 
     }
 
+    const CustomActivityIndicator = () => {
+        return (
+            <View style={styles.activityIndicatorStyle}>
+                <ActivityIndicator color="#FFA600" size="large" />
+            </View>
+        );
+    };
+
+    const isFocused = useIsFocused()
+    useEffect(() => {
+        setEmail("")
+    }, [isFocused])
+
+    useEffect(() => {
+        const backAction = () => {
+            props.navigation.goBack()
+            return true;
+        };
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        );
+        
+
+        return () => backHandler.remove();
+    }, []);
+
+    useEffect(() => {
+
+        setisEmailValid(Email.includes('.com') && Email.includes('@') ? true : false)
+        
+    }, [Email])
+
     return (
         <View style={[styles.container, { backgroundColor: state.value.color }]}>
-            
              <TouchableOpacity style={{ position: 'absolute', left: 5, top: 40 }} onPress={() => {
                     props.navigation.goBack()
 
